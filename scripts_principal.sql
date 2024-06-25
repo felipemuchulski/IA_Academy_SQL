@@ -486,6 +486,34 @@ SELECT
 FROM
 	uf
 
+-- Subconsultas
+
+-- Selecionar a data do pedido e o valor onde o valor seja maior que a média dos valores de todos os pedidos
+SELECT 
+	data_pedido,
+	valor
+FROM 
+	pedido
+WHERE
+	valor > select avg(valor) from pedido
+ 
+-- Exemplo com count
+SELECT 
+	pdd.data_pedido,
+	pdd.valor,
+	(SELECT SUM(quantidade) FROM pedido_produto AS pdp WHERE pdp.id_pedido = pdd.id_pedido) AS total
+FROM 
+	pedido AS pdd
+
+
+-- Exemplo com update
+-- Exemplo alterar o preço dos pedidos
+ 
+UPDATE pedido set valor = valor + ((valor * 5) / 100)
+WHERE valor > (select avg(valor) from pedido)
+
+SELECT * FROM pedido
+
 
 
 
