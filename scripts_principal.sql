@@ -460,6 +460,31 @@ FROM
 RIGHT OUTER JOIN
  	profissao as prf ON cln.id_profissao = prf.id_profissao
 
+-- Comandos adicionais
+SELECT * FROM pedido
+	
+SELECT 
+	EXTRACT(day from data_pedido),
+	EXTRACT(month from data_pedido),
+	EXTRACT(year from data_pedido)
+FROM 
+	pedido
+
+
+SELECT nome, substring(nome from 1 for 5) from cliente -- seleciona do caractere 1 ao 5
+SELECT nome, substring(nome from 1 for 5), substring(nome,2) FROM cliente -- tira as duas primeiras e começa a partir da 3 letra
+
+SELECT nome, upper(nome) from cliente -- deixa o nome maiusculo
+SELECT nome, cpf, coalesce(cpf, 'Não informado') from cliente -- Adiciona uma mensagem nos campos null
+
+SELECT 
+	case sigla
+		when 'PR' then 'Paraná'
+		when 'SC' then 'Santa Catarina'
+	else 'Outros'
+	end as uf
+FROM
+	uf
 
 
 
