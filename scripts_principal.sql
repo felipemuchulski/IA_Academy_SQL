@@ -507,13 +507,34 @@ FROM
 
 
 -- Exemplo com update
--- Exemplo alterar o preço dos pedidos
- 
+-- Exemplo alterar o preço dos pedidos 
 UPDATE pedido set valor = valor + ((valor * 5) / 100)
 WHERE valor > (select avg(valor) from pedido)
 
-SELECT * FROM pedido
+-- Views - são utilizadas para criar visões da tabela
+-- Exemplo nome e profissão da pessoa
+CREATE VIEW cliente_profissao as
+SELECT 
+	cln.nome AS cliente,
+	prf.nome as profissao
+FROM 
+	cliente as cln
+LEFT OUTER JOIN 
+	profissao as prf on cln.id_profissao = prf.id_profissao
 
+-- Para executar essa view rodar o seguinte comando:
+SELECT * FROM cliente_profissao WHERE cliente = 'Felipe Andrades'
 
+-- Para fazer alguma alteração na view, é fazer um drop, adicionar as alterações necessárias e criar novamente.
+DROP VIEW cliente_profissao
 
-
+CREATE VIEW cliente_profissao as
+SELECT 
+	cln.nome AS cliente,
+	cln.cpf,
+	prf.nome as profissao
+FROM 
+	cliente as cln
+LEFT OUTER JOIN 
+	profissao as prf on cln.id_profissao = prf.id_profissao
+-- Foi adicionado o CPF
