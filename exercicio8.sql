@@ -36,6 +36,7 @@ LEFT OUTER JOIN
 SELECT * FROM user_info
 
 -- 2. O nome do município e o nome e a sigla da unidade da federação.
+CREATE VIEW municipio_uf AS
 SELECT
 	mnc.nome_municipio AS municipio,
 	uf.nome_uf AS federacao,
@@ -46,6 +47,7 @@ LEFT OUTER JOIN
 	uf as uf on mnc.id_uf = uf.id_uf
 
 -- 3. O nome do produto, o valor e o nome do fornecedor dos produtos.
+CREATE VIEW produto_fornecedor AS 
 SELECT 
 	prt.nome_produto AS produto,
     prt.valor AS valor,
@@ -56,6 +58,7 @@ LEFT OUTER JOIN
 	fornecedor AS frc ON prt.id_fornecedor = frc.id_fornecedor
 
 -- 4. O nome da transportadora, o logradouro, o número, o nome da unidade de federação e a sigla da unidade de federação das transportadoras.
+CREATE VIEW transportadora_uf AS
 SELECT 
 	trp.nome_transportadora AS transportadora,
 	trp.logradouro,
@@ -70,6 +73,28 @@ LEFT OUTER JOIN
 	
 
 -- 5. A data do pedido, o valor, o nome da transportadora, o nome do cliente e o nome do vendedor dos pedidos.
+CREATE VIEW data_vendedor AS
+	SELECT 
+	pdd.data_pedido AS data,
+	pdd.valor,
+	trn.nome_transportadora AS transportadora,
+	cln.nome AS cliente,
+	vnd.nome_vendedor AS vendedor
+FROM 
+	pedido AS pdd
+LEFT OUTER JOIN 
+	transportadora AS trn ON pdd.id_transportadora = trn.id_transportadora
+LEFT OUTER JOIN
+	cliente AS cln ON pdd.id_cliente = cln.id_cliente
+LEFT OUTER JOIN 
+	vendedor AS vnd On pdd.id_vendedor = vnd.id_vendedor
 
 -- 6. O nome do produto, a quantidade, o valor unitário e o valor total dos produtos do pedido.
-
+SELECT 
+	prd.nome_produto AS nome,
+	pdp.quantidade,
+	pdp.valor_unitario
+FROM 
+	pedido_produto AS pdp
+LEFT OUTER JOIN 
+	produto AS prd ON pdp.id_produto = prd.id_produto
