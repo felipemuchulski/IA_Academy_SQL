@@ -538,3 +538,47 @@ FROM
 LEFT OUTER JOIN 
 	profissao as prf on cln.id_profissao = prf.id_profissao
 -- Foi adicionado o CPF
+
+-- Exemplo de serial
+CREATE TABLE exemplo (
+	id_exemplo SERIAL NOT NULL,
+	nome VARCHAR(50),
+
+	constraint pk_exemplo_idexemplo PRIMARY KEY(id_exemplo)
+);
+
+INSERT INTO exemplo (nome) VALUES ('Exemplo 1');
+INSERT INTO exemplo (nome) VALUES ('Exemplo 2');
+INSERT INTO exemplo (nome) VALUES ('Exemplo 3');
+INSERT INTO exemplo (nome) VALUES ('Exemplo 4');
+INSERT INTO exemplo (nome) VALUES ('Exemplo 5');
+
+SELECT * FROM exemplo
+
+-- Alterar tabelas para serem sequenciais os id's
+ -- Visualizar a tabela bairro
+SELECT * FROM bairro
+
+SELECT max(id_bairro) + 1 from bairro
+
+-- Criando sequencia para sequencia
+CREATE SEQUENCE bairro_id_seq minvalue 6
+
+-- Vincular a sequencia na tabela de bairro
+ALTER TABLE bairro alter id_bairro SET DEFAULT nextval('bairro_id_seq');
+-- Alterar a sequencia
+ALTER SEQUENCE bairro_id_seq OWNED BY bairro.id_bairro
+
+SELECT * FROM bairro
+INSERT INTO bairro (nome) VALUES('Teste')
+
+-- Deletar registro de teste
+DELETE FROM cliente WHERE id_cliente = 18
+
+-- Campos default:
+ALTER TABLE pedido ALTER column data_pedido SET DEFAULT current_date; -- se não for mencionado nenhuma data, coloca a data atual
+ALTER TABLE pedido ALTER column valor SET DEFAULT 0;
+
+-- Indices
+CREATE INDEX idx_cln_nome ON cliente (nome); -- usado para acelar as pesquisas na base de dados
+-- Quanto mais indices você adiciona, mais o banco de dados fica pesado
