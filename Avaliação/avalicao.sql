@@ -1,10 +1,11 @@
 -- Criar tabela editora
 CREATE TABLE editora (
 	id_editora SERIAL NOT NULL,
-	nome VARCHAR(35) NOT NULL,
+	nome VARCHAR(35) NOT NULL, -- faltou o nome unico
 	
 	CONSTRAINT pk_id_editora PRIMARY KEY (id_editora)
 );
+
 
 -- inserir dados
 INSERT INTO editora(nome) VALUES('Bookman');
@@ -19,6 +20,8 @@ CREATE TABLE categoria(
 	
 	CONSTRAINT pk_id_categoria PRIMARY KEY (id_categoria)
 );
+
+DROP TABLE categoria
 
 -- inserir dados
 INSERT INTO categoria(nome) VALUES('Banco de dados');
@@ -44,6 +47,7 @@ INSERT INTO autor(nome) VALUES('Ian Graham');
 INSERT INTO autor(nome) VALUES('Fabricio Xavier');
 INSERT INTO autor(nome) VALUES('Pablo Dalloglio');
 
+DROP TABLE autor
 -- Criar tabela livro
 CREATE TABLE livro (
 	id_livro SERIAL NOT NULL, 
@@ -55,6 +59,7 @@ CREATE TABLE livro (
 	CONSTRAINT fk_id_editora FOREIGN KEY(id_editora) REFERENCES editora(id_editora),
 	CONSTRAINT fk_id_categoria FOREIGN KEY(id_categoria) REFERENCES categoria(id_categoria)	
 );
+DROP TABLE livro
 
 -- Inserir os dados da tabela
 INSERT INTO livro(id_editora, id_categoria, nome) VALUES(2, 1, 'Banco de dados - 1 edição');
@@ -136,6 +141,7 @@ CREATE TABLE emprestimo_livro (
 	FOREIGN KEY (id_livro) REFERENCES livro(id_livro)
 )
 
+SELECT *FROM emprestimo
 
 -- Inserir os dados 
 INSERT INTO emprestimo_livro(id_emprestimo, id_livro) VALUES(1, 1);
@@ -150,10 +156,10 @@ INSERT INTO emprestimo_livro(id_emprestimo, id_livro) VALUES(7, 8);
 
 -- Criar indices
 -- Criar indice de emprestimo da tabela de emprestimo
-CREATE INDEX idx_emp_emprestimo ON emprestimo(emprestimo);
+CREATE INDEX idx_emp_emprestimo ON emprestimo(data_emprestimo);
 
 -- Criar indice de devolução da tabela de emprestimo
-CREATE INDEX idx_dev_emprestimo ON emprestimo(devolucao)
+CREATE INDEX idx_dev_emprestimo ON emprestimo(data_devolucao)
 
 
 -- Consultas simples
@@ -172,5 +178,149 @@ SELECT nome FROM livro WHERE id_editora = 1
  -- Os emprestimos realizados entre 05/05/2012 e 10/05/2012
 SELECT * FROM emprestimo WHERE data_emprestimo BETWEEN '2012-05-05' AND '2012-05-10';
 
+ -- Os emprestimos que nao foram feitos entre 05/05/2012 
+ SELECT * FROM emprestimo WHERE data_emprestimo NOT BETWEEN '2012-05-05' AND '2012-05-10';
+
+ -- Os emprestimos que ja foram devolvidos
+ SELECT * FROM emprestimo WHERE devolvido = 'S';
 
 
+-- Consultas com agrupamento simples
+ -- A quantidade de livros
+ SELECT count(id_livro) FROM livro 
+ 
+ -- O somatario do valor dos emprestimos
+ SELECT sum(valor) FROM emprestimo
+ 
+ -- O maior valor dos emprestimos
+ SELECT MAX(valor) FROM emprestimo 
+ 
+ -- O menor valor dos emprestimos
+ SELECT MIN(valor) FROM emprestimo
+ 
+ -- A media do valor dos emprestimos
+  SELECT AVG(valor) FROM emprestimo
+ 
+ -- O somatorio do valor do emprestimo que estao entre 05/05/2012 e 10/05/2012
+ SELECT sum(valor) FROM emprestimo WHERE data_emprestimo BETWEEN '2012-05-05' AND '2012-05-10';
+ 
+ -- A quantidade de emprestimos que estao entre 01/05/2012 e 10/05/2012
+ SELECT count(id_emprestimo) FROM emprestimo WHERE data_emprestimo BETWEEN '2012-05-01' AND '2012-05-05';
+ 
+-- Consultas com join
+ -- O nome do livro, a categoria e a editora(livro) - fazer uma view
+ CREATE VIEW complete_book AS
+ 	SELECT
+		lvr.nome AS livro,
+		ctg.nome AS categoria,
+		edt.nome AS editora
+	FROM 
+		livro AS lvr
+	LEFT OUTER JOIN 
+		categoria AS ctg ON lvr.id_categoria = ctg.id_categoria
+	LEFT OUTER JOIN 
+		editora AS edt ON lvr.id_editora = edt.id_editora
+		
+  -- O nome do livro e o nome do autor(livro_autor) - fazer uma view
+  CREATE VIEW autor_livro AS
+   	SELECT 
+		lvr.nome AS livro,
+		aut.nome AS autor
+	FROM
+		livro_autor AS lva
+	LEFT OUTER JOIN
+		livro as lvr on lva.id_livro = lvr.id_livro
+	LEFT OUTER JOIN
+		autor as aut on lva.id_autor = aut.id_autor
+		
+	SELECT * FROM autor_livro
+	
+   -- O nome dos livros do autor ian graham
+	SELECT 
+    	lvr.nome AS livro,
+    	aut.nome AS autor
+	FROM 
+    	livro_autor AS lva
+	LEFT JOIN
+    	livro AS lvr ON lva.id_livro = lvr.id_livro
+	LEFT JOIN
+    	autor AS aut ON lva.id_autor = aut.id_autor
+	WHERE 
+    	aut.nome = 'Ian Graham';
+
+	-- O nome do aluno, a data do emprestimo e data de devolução(emprestimo)
+	SELECT 
+		aln.nome AS aluno,
+		emp.data_emprestimo AS Data_Emprestimo,
+		emp.data_devolucao AS Data_Devolução
+	FROM 
+		emprestimo AS emp
+	LEFT OUTER JOIN 
+		aluno as aln on emp.id_aluno = aln.id_aluno
+	
+	-- O nome de todos os livros que foram emprestados
+	SELECT 
+		distinct(lvr.nome) AS livro
+	FROM 
+		emprestimo_livro as epl
+	LEFT OUTER JOIN
+		livro as lvr on epl.id_livro = lvr.id_livro
+	
+	
+	
+	
+-- Consulta com agrupamento + join
+ -- O nome da editora e a quantidade de livros de cada editora
+ SELECT
+    edt.nome as editora,
+  	count(id_livro) as quantidade
+FROM 
+	livro AS lvr
+LEFT OUTER JOIN
+	editora as edt on lvr.id_editora = edt.id_editora
+GROUP BY
+ 	edt.nome
+	
+-- O nome da categoria e a quantidade de livros de cada categoria
+SELECT 
+	ctg.nome AS categoria,
+	count(id_livro) AS quantidade
+FROM 
+	livro as lvr
+LEFT OUTER JOIN 
+	categoria AS ctg on lvr.id_categoria = ctg.id_categoria
+GROUP BY
+ 	ctg.nome
+
+-- O nome do autor e a quantidade de livros de cada autor (livro autor)
+SELECT 
+	atr.nome AS autor,
+	count(lvr.id_livro) AS quantidade
+FROM 
+	livro_autor AS lva
+LEFT OUTER JOIN
+	autor AS atr on lva.id_autor = atr.id_autor
+LEFT OUTER JOIN 
+	livro AS lvr on lva.id_livro = lvr.id_livro
+GROUP BY
+	atr.nome
+	
+--  O nome do aluno e o somatorio do valor total dos emprestimos de cada aluno
+SELECT 
+	aln.nome AS aluno,
+	sum(emp.valor) AS valor_total
+FROM 
+	emprestimo AS emp
+LEFT OUTER JOIN
+	aluno AS aln ON emp.id_aluno = aln.id_aluno
+GROUP BY
+	aln.nome
+	
+-- 
+	
+	
+	
+	
+	
+	
+	

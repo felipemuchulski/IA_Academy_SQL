@@ -290,16 +290,16 @@ ALTER TABLE cliente DROP uf
 ALTER TABLE cliente ADD id_municipio INTEGER;
 ALTER TABLE cliente ADD CONSTRAINT fk_cliente_idmunicipio FOREIGN KEY (id_municipio) REFERENCES municipio (id_municipio);
 
-UPDATE cliente SET id_municipio = 1 WHERE id_cliente IN (10, 11)
-UPDATE cliente SET id_municipio = 2 WHERE id_cliente IN (3, 12)
-UPDATE cliente set id_municipio = 3 WHERE id_cliente IN (4)
-UPDATE cliente SET id_municipio = 4 WHERE id_cliente IN (5)
-UPDATE cliente SET id_municipio = 5 WHERE id_cliente IN (6,13)
-UPDATE cliente SET id_municipio = 6 WHERE id_cliente IN (7)
-UPDATE cliente SET id_municipio = 7 WHERE id_cliente IN (8)
-UPDATE cliente SET id_municipio = 8 WHERE id_cliente IN (9)
-UPDATE cliente SET id_municipio = 9 WHERE id_cliente IN (1,2)
-UPDATE cliente SET id_municipio = 10 WHERE id_cliente IN (15)
+UPDATE cliente SET id_municipio = 1 WHERE id_cliente IN (10, 11);
+UPDATE cliente SET id_municipio = 2 WHERE id_cliente IN (3, 12);
+UPDATE cliente set id_municipio = 3 WHERE id_cliente IN (4);
+UPDATE cliente SET id_municipio = 4 WHERE id_cliente IN (5);
+UPDATE cliente SET id_municipio = 5 WHERE id_cliente IN (6,13);
+UPDATE cliente SET id_municipio = 6 WHERE id_cliente IN (7);
+UPDATE cliente SET id_municipio = 7 WHERE id_cliente IN (8);
+UPDATE cliente SET id_municipio = 8 WHERE id_cliente IN (9);
+UPDATE cliente SET id_municipio = 9 WHERE id_cliente IN (1,2);
+UPDATE cliente SET id_municipio = 10 WHERE id_cliente IN (15);
 
 
 	-- Criar tabela de fornecedor
