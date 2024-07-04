@@ -582,3 +582,38 @@ ALTER TABLE pedido ALTER column valor SET DEFAULT 0;
 -- Indices
 CREATE INDEX idx_cln_nome ON cliente (nome); -- usado para acelar as pesquisas na base de dados
 -- Quanto mais indices você adiciona, mais o banco de dados fica pesado
+
+
+
+-- Tópicos especiais
+ -- Funções / Stored Procedures (procedimentos armazenados) / Trigger / Dominios / Usuarios e permissoes / Transacoes / Backup e Restore
+ 
+-- Funções:
+SELECT valor, concat('R$', round(cast(valor as numeric), 2)) FROM pedido
+
+-- Criada uma função para formatar o valor 
+CREATE FUNCTION formata_moeda(valor float) RETURNS VARCHAR(20) LANGUAGE plpgsql as
+$$
+BEGIN
+	RETURN concat('R$', round(cast(valor as numeric), 2));
+END;
+$$;
+
+-- Ao chamar a função ela vai formatar automaticamente o valor
+SELECT valor, formata_moeda(valor) FROM pedido
+
+-- Fazer o mesmo para tabela de produto
+SELECT valor, formata_moeda(valor) FROM produto
+
+-- Fazer uma função que ira retornar o nome do cliente com base no id do mesmo
+CREATE FUNCTION get_nome_by_id(idc INTEGER) RETURNS VARCHAR(50) LANGUAGE plpgsql AS
+$$
+DECLARE r VARCHAR(50);
+BEGIN
+	SELECT nome INTO r FROM cliente WHERE id_cliente = idc;
+	RETURN r;
+END;
+$$;
+
+SELECT data_pedido, valor, get_nome_by_id(id_cliente) FROM pedido
+
