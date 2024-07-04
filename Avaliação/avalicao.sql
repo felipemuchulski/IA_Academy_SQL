@@ -316,11 +316,40 @@ LEFT OUTER JOIN
 GROUP BY
 	aln.nome
 	
--- 
+-- O nome do aluno e o somatorio do valor total dos emprestimo de cada aluno que o somatorio total é maior do que 7 (emprestimo)
+SELECT 
+	aln.nome AS nome,
+	sum(emp.valor)
+FROM 
+	emprestimo as emp
+LEFT OUTER JOIN
+	aluno as aln on emp.id_aluno = aln.id_aluno
+GROUP BY
+	aln.nome
+HAVING
+ 	sum(emp.valor) > 7
+
+-- Consultas comandos diversos
+
+-- O nome de todos os alunos em ordem decrescente e em letra maiúscula.
+SELECT UPPER(nome) FROM aluno ORDER BY	nome DESC
 	
+-- Os emprestimos que foram feitos no mes 04 de 2012
+SELECT * from emprestimo 
+WHERE extract(year from data_emprestimo) = 2012 AND extract(month from data_emprestimo) = 4
 	
-	
-	
-	
-	
-	
+-- Todos os campos do emprestimo. Caso ja tenha sido devolvido, mostrar a mensagem devolvido.
+SELECT 
+    aln.nome AS aluno,
+    emp.data_emprestimo,
+    emp.data_devolucao,
+    emp.valor,
+    CASE emp.devolvido -- Corrigido para usar emp.devolvido
+        WHEN 'S' THEN 'Devolvido'
+        WHEN 'N' THEN 'Não Devolvido'
+        ELSE 'Sem Registro' -- Opcional: caso haja outros valores além de 'S' e 'N'
+    END AS status_devolucao
+FROM 
+    emprestimo AS emp
+LEFT JOIN 
+    aluno AS aln ON emp.id_aluno = aln.id_aluno;
