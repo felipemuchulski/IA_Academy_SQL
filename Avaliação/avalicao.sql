@@ -353,3 +353,49 @@ FROM
     emprestimo AS emp
 LEFT JOIN 
     aluno AS aln ON emp.id_aluno = aln.id_aluno;
+	
+-- Somente o caractere 5 ate o caractere 10 do nome dos autores
+SELECT SUBSTRING(nome from 5 for 10 ) FROM autor
+
+-- O valor do emprestimo e somente o mes da data do emprestimo. Escreva 'Janeiro', 'Fevereiro', etc
+SELECT 
+	valor,
+	CASE EXTRACT(month from data_emprestimo) 
+		WHEN 1 then 'Janeiro'
+		WHEN 2 THEN 'Fevereiro'
+		WHEN 3 THEN 'Marco'
+		WHEN 4 THEN 'Abril'
+		WHEN 5 THEN 'Maio'
+	END AS mes
+FROM 
+	emprestimo
+	
+-- Subconsulta
+-- A data do empréstimo e o valor dos empréstimos que o valor seja maior que a média de todos os empréstimos.
+SELECT 
+	data_emprestimo,
+	valor
+FROM 
+	emprestimo
+WHERE 
+	valor > (select avg(valor) from emprestimo)
+
+
+-- A data do empréstimo e o valor dos empréstimos que possuem mais de um livro.
+SELECT 
+	emp.data_emprestimo,
+	emp.valor
+FROM 
+	emprestimo AS emp
+WHERE 
+	(SELECT count(elv.id_emprestimo) FROM emprestimo_livro as elv WHERE elv.id_emprestimo =  emp.id_emprestimo) > 1
+
+-- A data do empréstimo e o valor dos empréstimos que o valor seja menor que a soma de todos os empréstimos.
+SELECT 
+	data_emprestimo,
+	valor
+FROM 
+	emprestimo
+WHERE 
+ 	valor < (SELECT sum(valor) FROM emprestimo)
+	
