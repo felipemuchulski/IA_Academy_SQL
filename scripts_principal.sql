@@ -584,7 +584,6 @@ CREATE INDEX idx_cln_nome ON cliente (nome); -- usado para acelar as pesquisas n
 -- Quanto mais indices você adiciona, mais o banco de dados fica pesado
 
 
-
 -- Tópicos especiais
  -- Funções / Stored Procedures (procedimentos armazenados) / Trigger / Dominios / Usuarios e permissoes / Transacoes / Backup e Restore
  
@@ -624,3 +623,31 @@ $$
 $$;
 SELECT * FROM bairro
 CALL insere_bairro('Serrano')
+
+-- Triggers -- gatilhos
+CREATE TABLE bairro_auditoria (
+	id_bairro INTEGER NOT NULL,
+	data_criacao TIMESTAMP NOT NULL
+); 
+
+-- Criação da função que será executada na Trigger
+CREATE OR REPLACE FUNCTION bairro_log() RETURNS TRIGGER LANGUAGE plpgsql AS
+$$
+	BEGIN
+	
+		INSERT INTO bairro_auditoria(id_bairro, data_criacao) VALUES (new.id_bairro, current_timestamp);
+		return new;
+	END;
+$$;
+
+-- Criação da trigger
+CREATE OR REPLACE TRIGGER log_bairro_trigger 
+	AFTER INSERT ON bairro FOR EACH ROW 
+	EXECUTE PROCEDURE bairro_log();
+
+-- Inserir valores de testes
+CALL insere_bairro('Diamantino');
+CALL insere_bairro('São Ciro');
+
+-- Verificar na tabela de auditoria 
+SELECT * FROM bairro_auditoria -- foi mostrado os registros da inserção de bairros
