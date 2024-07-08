@@ -47,6 +47,8 @@ FROM
 LEFT OUTER JOIN
 	uf as uf on mnc.id_uf = uf.id_uf
 
+DROP VIEW municipio_uf
+
 -- 3. O nome do produto, o valor e o nome do fornecedor dos produtos.
 CREATE VIEW produto_fornecedor AS 
 SELECT 
@@ -57,6 +59,8 @@ FROM
 	produto AS prt
 LEFT OUTER JOIN
 	fornecedor AS frc ON prt.id_fornecedor = frc.id_fornecedor
+
+DROP VIEW produto_fornecedor
 
 -- 4. O nome da transportadora, o logradouro, o número, o nome da unidade de federação e a sigla da unidade de federação das transportadoras.
 CREATE VIEW transportadora_uf AS
@@ -72,7 +76,7 @@ LEFT OUTER JOIN
 LEFT OUTER JOIN
 	uf on mnc.id_uf = uf.id_uf
 	
-
+DROP VIEW transportadora_uf
 -- 5. A data do pedido, o valor, o nome da transportadora, o nome do cliente e o nome do vendedor dos pedidos.
 CREATE VIEW data_vendedor AS
 	SELECT 
