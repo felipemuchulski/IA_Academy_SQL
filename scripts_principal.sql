@@ -651,3 +651,38 @@ CALL insere_bairro('São Ciro');
 
 -- Verificar na tabela de auditoria 
 SELECT * FROM bairro_auditoria -- foi mostrado os registros da inserção de bairros
+
+
+-- Dominios
+-- É um tipo de dado definido pelo o usuário, para os campos da tabela ficarem todos padronizados.
+-- Exemplo para padronizar os ids das tabelas
+CREATE DOMAIN id_curso AS smallint;
+CREATE DOMAIN id_medio AS integer;
+CREATE DOMAIN id_longo AS bigint;
+
+
+-- verificar a documentação para sabermos como personalizar os dados de maneira correta.
+-- Criar dominios relacionados a caracteres
+CREATE DOMAIN sigla AS char(3);
+CREATE DOMAIN codigo AS varchar(10);
+CREATE DOMAIN nome_curto AS varchar(15);
+CREATE DOMAIN nome_medio AS VARCHAR(50);
+CREATE DOMAIN nome_longo AS varchar(70);
+
+-- Criar um dominio do tipo data e hora
+CREATE DOMAIN data as date;
+CREATE DOMAIN hora as time;
+CREATE DOMAIN data_hora timestamp;
+
+-- Criar dominio referente a númericos
+CREATE DOMAIN moeda AS numeric(10,2);
+CREATE DOMAIN float_curso AS numeric(6,2);
+CREATE DOMAIN float_medido AS numeric(10,2);
+CREATE DOMAIN float_longo AS numeric(15,2);
+
+-- Adicionar dominio na tabela
+ALTER TABLE bairro ALTER COLUMN nome TYPE nome_medio; -- alterado valor, criar a view novamente.
+DROP VIEW cliente_dados
+
+
+
