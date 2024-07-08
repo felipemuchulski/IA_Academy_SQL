@@ -1,7 +1,8 @@
 --Exercícios views
 
 -- 1. O nome, a profissão, a nacionalidade, o complemento, o município, a unidade de federação, o bairro, o CPF,o RG, a data de nascimento, o gênero (mostrar “Masculino” ou “Feminino”), o logradouro, o número e as observações dos clientes.
-CREATE VIEW user_info as
+
+CREATE VIEW cliente_dados as
 SELECT 
 	cln.nome AS cliente,
 	prf.nome AS profissao,
@@ -33,7 +34,7 @@ LEFT OUTER JOIN
 LEFT OUTER JOIN
 	bairro AS brr ON cln.id_bairro = brr.id_bairro
 
-SELECT * FROM user_info
+SELECT * FROM cliente_dados
 
 -- 2. O nome do município e o nome e a sigla da unidade da federação.
 CREATE VIEW municipio_uf AS
