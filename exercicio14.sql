@@ -13,6 +13,8 @@ BEGIN
 END;
 $$;
 
+DROP TRIGGER log_pedido_trigger ON pedido
+
 -- Criação do trigger
 CREATE TRIGGER pedido_delete_trigger
 AFTER DELETE ON pedido
