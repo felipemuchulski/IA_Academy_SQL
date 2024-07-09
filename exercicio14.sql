@@ -13,6 +13,7 @@ BEGIN
 END;
 $$;
 
+DROP FUNCTION delete_log()
 DROP TRIGGER log_pedido_trigger ON pedido
 
 -- Criação do trigger
@@ -21,6 +22,7 @@ AFTER DELETE ON pedido
 FOR EACH ROW
 EXECUTE FUNCTION delete_log();
 
+DROP TRIGGER pedido_delete_trigger ON pedido
 DROP TABLE pedidos_apagados
 
 -- Inserção do pedido (opcional, se você ainda precisar inserir o pedido)
@@ -32,7 +34,7 @@ DELETE FROM pedido WHERE id_pedido = 16;
 
 -- Selecionar para ver se o valor foi adicionado
 SELECT * FROM pedidos_apagados
-
+DROP TABLE pedidos_apagados
 
 -- > Código da aula
 CREATE TABLE pedidos_apagados (
