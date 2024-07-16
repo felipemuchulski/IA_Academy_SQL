@@ -52,12 +52,11 @@ ALTER TABLE pedido ALTER COLUMN data_pedido TYPE data;
 ALTER TABLE pedido ALTER COLUMN valor TYPE moeda;
 
 -- Alterar pedido_produto
+CREATE DOMAIN quantidade AS smallint;
 ALTER TABLE pedido_produto ALTER COLUMN id_pedido TYPE id_longo;
 ALTER TABLE pedido_produto ALTER COLUMN id_produto TYPE id_medio;
 ALTER TABLE pedido_produto ALTER COLUMN quantidade TYPE quantidade;
 ALTER TABLE pedido_produto ALTER COLUMN valor_unitario TYPE moeda;
-
-CREATE DOMAIN quantidade AS smallint;
 
 -- Alterar tabela pedidos_apagados
 ALTER TABLE pedidos_apagados ALTER COLUMN id_pedido TYPE id_longo;

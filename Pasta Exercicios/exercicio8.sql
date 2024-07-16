@@ -95,8 +95,13 @@ LEFT OUTER JOIN
 	vendedor AS vnd On pdd.id_vendedor = vnd.id_vendedor
 
 -- 6. O nome do produto, a quantidade, o valor unitário e o valor total dos produtos do pedido.
+<<<<<<< HEAD
 CREATE VIEW info_produto AS
 	SELECT 
+=======
+CREATE VIEW dados_pedido AS
+SELECT 
+>>>>>>> da787c4c6dccec2d784088afc063a4e1bb26a8ff
 	prd.nome_produto AS nome,
 	pdp.quantidade,
 	pdp.valor_unitario

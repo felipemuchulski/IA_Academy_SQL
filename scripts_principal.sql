@@ -24,7 +24,7 @@ DROP TABLE cliente
 
 -- inserir dados na tabela
 INSERT INTO cliente (id_cliente, nome, cpf, rg, data_nascimento, genero, profissao, nacionalidade, logradouro, numero, complemento,bairro, municipio, uf)
-VALUES (1, 'Felipe Muchulski', '03366008016', '3232323', '2002-12-02', 'M', 'Analista Operacional', 'Brasileiro', 'Rua Vittorio Tatto', '280', 'Casa', 'Ana Rech', 'Caxias do Sul', 'RS' );
+VALUES (1, 'Felipe Muchulski', '88094054323', '3232323', '2002-12-02', 'M', 'Analista Operacional', 'Brasileiro', 'Rua Vittorio Tatto', '280', 'Casa', 'Ana Rech', 'Caxias do Sul', 'RS' );
 
 INSERT INTO cliente (id_cliente, nome, cpf, rg, data_nascimento, genero, profissao, nacionalidade, logradouro, numero, complemento,bairro, municipio, uf)
 VALUES (2, 'Clara Muchulski', '5434445560', '23232323', '2008-07-30', 'F', 'Estudante', 'Brasileiro', 'Rua Vittorio Tatto', '280', 'Casa', 'Ana Rech', 'Caxias do Sul', 'RS' );
@@ -684,7 +684,11 @@ CREATE DOMAIN float_longo AS numeric(15,2);
 ALTER TABLE bairro ALTER COLUMN nome TYPE nome_medio; -- alterado valor, criar a view novamente.
 DROP VIEW cliente_dados
 
+-- Usuários e permissões
+CREATE ROLE gerente;
+CREATE ROLE estagiario;
 
+<<<<<<< HEAD
 -- Usuários e permissões
 CREATE ROLE gerente;
 CREATE ROLE estagiario;
@@ -699,3 +703,20 @@ GRANT all ON ALL SEQUENCES IN SCHEMA PUBLIC TO gerente;
 
 CREATE ROLE maria login password '123' in role gerente;
 CREATE ROLE pedro login password '123' in role estagiario;
+=======
+-- dada permissão maior para o usuario de gerente
+GRANT SELECT, INSERT, DELETE, UPDATE ON bairro, cliente, complemento, fornecedor, municipio, nacionalidade, pedido, pedido_produto, produto, profissao, transportadora, uf, vendedor TO gerente WITH GRANT option;
+-- dada menor permissão para o usuario de estagiario
+GRANT SELECT ON cliente_dados, dados_pedido TO estagiario;
+
+CREATE ROLE maria login password '123' in role gerente;
+CREATE ROLE pedro login password '321' in role estagiario;
+
+-- Para efetuar testes, tem que se conectar com outro login sem ser o usuário postgreSQL.
+
+-- Para dar permissão para criar sequencencia com o role gerente, deve ser feita a seguinte alteração
+-- GRANT SELECT ON ALL SEQUENCES IN SCHEMA PUBLIC TO gerente;
+GRANT ALL ON ALL SEQUENCES in SCHEMA PUBLIC TO gerente; -- Aqui foi dada as permissões totais para a role gerente
+
+-- Para retirar as permissões, iremos retirar as permissões, utilizamos o comando REVOKE
+>>>>>>> da787c4c6dccec2d784088afc063a4e1bb26a8ff
