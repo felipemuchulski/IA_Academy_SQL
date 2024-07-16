@@ -685,4 +685,17 @@ ALTER TABLE bairro ALTER COLUMN nome TYPE nome_medio; -- alterado valor, criar a
 DROP VIEW cliente_dados
 
 
+-- Usuários e permissões
+CREATE ROLE gerente;
+CREATE ROLE estagiario;
 
+GRANT SELECT, INSERT ON bairro, cliente, complemento, fornecedor, municipio, nacionalidade, pedido, pedido_produto, produto, transportadora, uf, vendedor TO gerente WITH grant option;
+GRANT SELECT on cliente_dados, produto_fornecedor TO estagiario;
+
+-- Alterando permissão 
+GRANT SELECT ON ALL SEQUENCES in schema public to gerente;
+GRANT all ON ALL SEQUENCES IN SCHEMA PUBLIC TO gerente;
+-- comando revoke tira as permissões
+
+CREATE ROLE maria login password '123' in role gerente;
+CREATE ROLE pedro login password '123' in role estagiario;
