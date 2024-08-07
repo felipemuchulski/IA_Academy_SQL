@@ -1,0 +1,42 @@
+-- Aula de projection
+
+-- π hcode, name, city, country (hotel)
+-- π tcode, name, country, age, gender (tourist)
+-- π acode, aname, duration_in_minutes (activity)
+-- π hcode, tcode, year, days, cost (stay)
+-- π tcode, acode, year, cost (participate)
+
+-- Aula de selection
+-- σ hcode = 'h1' (hotel)
+-- σ year > 2001 (participate)
+-- σ year > 2001 ∧ year ≤ 2004 (participate)
+
+-- Aula project + selection, uniao e intersecção
+-- π tcode, acode, year σ  year > 2001 ∧ year ≤ 2004 (participate)
+-- π year, days σ days > 3 (stay)
+
+-- π tcode (participate) -- t1, t2, t3
+-- π tcode (stay) -- t1, t2, t3, t4
+-- π tcode (participate) ∪ π tcode (stay)
+-- π tcode (participate) ∩ π tcode (stay)
+
+
+-- Aula Joins
+-- π participate.tcode, acode, year, cost (participate ⟕ participate.tcode = tourist.tcode tourist)
+-- π turista←trt.name, act.aname, ano←year, custo←cost (ρ ptr participate ⟕ ptr.tcode = trt.tcode ρ trt tourist ⟕ ptr.acode = act.acode ρ act activity)
+
+
+-- Aula agrupamentos
+-- π tcode, cost (participate)
+-- γ tcode; sum(cost)->soma (participate)
+-- γ tourist.name; sum(cost)->soma (participate ⟕ participate.tcode = tourist.tcode tourist)
+
+-- Exercicios
+-- O nome e o país dos turistas com mais de 20 anos e do gênero feminino (project + select)
+-- π name, country σ age > 20 ∧ gender = 'female' (tourist)
+
+-- O nome do hotel, o nome do cliente, o ano, os dias de hospedagem e custo da hospedagem (join na tabela stay)
+-- π htl.name, trt.name, ano←sty.year, dias←sty.days, custo←sty.cost (ρ htl hotel ⟕ htl.hcode = sty.hcode ρ sty stay ⟕ sty.tcode = trt.tcode ρ trt tourist)
+
+-- O somatório do custo da hospedagem agrupado pelo nome do hotel (agrupamento e join na tabela stay)
+-- γ hotel.name; sum(stay.cost)-> gasto_total (hotel ⟕ hotel.hcode = stay.hcode stay)
