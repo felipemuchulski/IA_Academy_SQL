@@ -719,4 +719,37 @@ CREATE ROLE pedro login password '321' in role estagiario;
 GRANT ALL ON ALL SEQUENCES in SCHEMA PUBLIC TO gerente; -- Aqui foi dada as permissões totais para a role gerente
 
 -- Para retirar as permissões, iremos retirar as permissões, utilizamos o comando REVOKE
->>>>>>> da787c4c6dccec2d784088afc063a4e1bb26a8ff
+
+-- Transações
+CREATE TABLE conta (
+	idconta SERIAL NOT NULL,
+	cliente nome_medio NOT NULL,
+	saldo moeda not null default 0,
+
+	constraint pk_cnt_idconta primary key(idconta)
+)
+
+INSERT INTO conta (cliente, saldo) VALUES ('Cliente 1', 1000);
+INSERT INTO conta (cliente, saldo) VALUES ('Cliente 2', 500);
+
+UPDATE conta SET saldo = saldo - 100 WHERE idconta = 1;
+UPDATE conta SET saldo = saldo + 100 WHERE idconta = 2;
+
+SELECT * FROM conta
+
+-- Fazer rollback
+begin;
+UPDATE conta SET saldo = saldo - 100 WHERE idconta = 1;
+UPDATE conta SET saldo = saldo + 100 WHERE idconta = 2;
+rollback;
+
+-- Comando commit - para confirmar a alteração 
+begin;
+UPDATE conta SET saldo = saldo - 100 WHERE idconta = 1;
+UPDATE conta SET saldo = saldo + 100 WHERE idconta = 2;
+commit;
+
+SELECT * FROM conta
+
+
+-- Álgebra Relacional: 
